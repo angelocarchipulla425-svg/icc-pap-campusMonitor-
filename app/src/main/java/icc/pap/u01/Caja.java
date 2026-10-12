@@ -1,5 +1,8 @@
 package icc.pap.u01;
-    // Clase genérica
+
+import java.util.function.Function;
+
+// Clase genérica
 public class Caja<T> {
     //Dato Genérico
     private final T valor;
@@ -13,5 +16,11 @@ public class Caja<T> {
     // Getter
     public T obtener() {
         return valor;
+    }
+
+    // Metodo genérico
+    public <R> R mapear(Function<T, R> operacion) {
+        R resultado = operacion.apply(valor);
+        return resultado;
     }
 }
