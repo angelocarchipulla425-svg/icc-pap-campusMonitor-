@@ -8,4 +8,4 @@ Agregué un runLectura() para instanciar la clase con los datos que nos pide, de
 2. Ejecucción correcta
 ![alt text](image.png)
 
-Se pueden guardar los resultados directamente en variables Double e Integer, sin casting gracias a al autoboxing
+Se pueden guardar los resultados directamente en variables Double e Integer, sin casting gracias a al autoboxing pasando de primitivo a objeto.
