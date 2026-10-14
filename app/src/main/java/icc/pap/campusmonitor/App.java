@@ -4,6 +4,7 @@
 package icc.pap.campusmonitor;
 
 import icc.pap.models.Lectura;
+import icc.pap.models.Reporte;
 
 public class App {
     public String getGreeting() {
@@ -13,12 +14,14 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
         runLectura();
+        runTransformaciones();
     }
 
     private static void runLectura(){
         Lectura<Double> temperatura = new Lectura<>(
                 "S01", 22.5, "°C");
         Lectura<Integer> lectura1 = new Lectura<>("S02", 18, "Personas");
+
 
         System.out.println("Lecturas de CampusMonitor");
         System.out.println(temperatura.getIdSensor() + " | " + temperatura.getValor() + " " + temperatura.getUnidad());
@@ -27,5 +30,43 @@ public class App {
         System.out.println("Valores recuperados sin casting:");
         System.out.println("Temperatura: " + temperatura.getValor());
         System.out.println("Ocupación: " + lectura1.getValor());
+    }
+
+    private static void runTransformaciones(){
+        Lectura<Double> temperatura = new Lectura<>(
+                "S01", 22.5, "°C");
+        Lectura<Integer> ocupacion = new Lectura<>("S02", 
+        18, "personas");
+
+        System.out.println("Original: " + temperatura.getIdSensor() + " | " + temperatura.getValor() + temperatura.getUnidad());
+
+        Lectura<Double> temperaturaTransformada = temperatura.transformar(
+            c -> c * 9.0 / 5.0 + 32, "°F"
+        );
+
+        System.out.println("Transformada: " + temperaturaTransformada.getIdSensor() + " | " + temperaturaTransformada.getValor() + " " + temperaturaTransformada.getUnidad());
+
+
+
+        System.out.println("Original: " + ocupacion.getIdSensor() + " | " + ocupacion.getValor() + " " + ocupacion.getUnidad() );
+
+        Lectura<String> ocupacionTransformada = ocupacion.transformar(v -> v + " personas", "texto");
+
+        System.out.println("Transformada: " + ocupacionTransformada.getIdSensor() + " | " + ocupacionTransformada.getValor() + "| unidad: " + ocupacionTransformada.getUnidad());
+
+
+        // Double -> Reporte
+        Lectura<Double> temperatura2 = new Lectura<>("S01", 22.5, "°C");
+
+        System.out.println("Transformada: " + temperatura2.getIdSensor() + " | " + temperatura2.getValor() + " | unidad: " + temperatura2.getUnidad());
+
+        Lectura<Reporte> reporte = new Lectura<Reporte>("S01", new Reporte(
+            temperatura2.getIdSensor(),
+            temperatura2.getValor(),
+            temperatura2.getUnidad()),
+             "Reporte");
+
+            
+        System.out.println("Transformado: " + reporte.getIdSensor() + " | " + reporte.getValor() + " | Datos: " + reporte.getUnidad());
     }
 }

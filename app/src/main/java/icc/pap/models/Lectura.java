@@ -1,13 +1,15 @@
 package icc.pap.models;
 
+import java.util.function.Function;
+
 public class Lectura<T> {
     private String idSensor;
-    private T Valor;
+    private T valor;
     private String unidad;
 
     public Lectura(String idSensor, T valor, String unidad) {
         this.idSensor = idSensor;
-        Valor = valor;
+        this.valor = valor;
         this.unidad = unidad;
     }
 
@@ -16,12 +18,26 @@ public class Lectura<T> {
     }
 
     public T getValor() {
-        return Valor;
+        return valor;
     }
 
     public String getUnidad() {
         return unidad;
     }
     
+    public <R> Lectura<R> transformar(Function<T, R> conversor, String nuevaUnidad){
+        
+        if(conversor == null) {
+            throw new IllegalArgumentException("El conversor no puede estar vacío.");
+        }
+
+        R valorTransformado = conversor.apply(valor);
+        
+        if(valorTransformado == null) {
+            throw new IllegalArgumentException("La conversión no puede salir vacía.");
+        }
+
+        return new Lectura<>(this.idSensor, valorTransformado, nuevaUnidad);
+    }
     
 }
